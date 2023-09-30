@@ -3,6 +3,21 @@ import './loader.css';
 
 const Loader = (props) => {
 
+
+    var { width, height, fontSize,duration } = props;
+    if (!width)
+        width = 70;
+    if (!height)
+        height = 70;
+    if (!fontSize)
+        fontSize = 16;
+    if(!duration)
+    duration = 6
+
+
+
+
+
     var mainTimerRef = useRef(null)
 
     var timerRef = useRef(null)
@@ -15,129 +30,117 @@ const Loader = (props) => {
 
     var progress = 0;
 
-    var animate = ()=>{
-        if(progress == 100){
-        clearInterval(animateGlobal)
-        progress = 0;
-        return;    
-    }
-         progress++;   
-         timerRef3.current.textContent=progress+"%"
+    var animate = () => {
+        if (progress == 100) {
+            clearInterval(animateGlobal)
+            progress = 0;
+            return;
+        }
+        progress++;
+        timerRef3.current.textContent = progress + "%"
     }
 
     // setInterval(animate,600)
 
     var animateGlobal;
-   function stopAnimation(){
-    status = "paused";
-    if(animateGlobal){
-     clearInterval(animateGlobal);
+    function stopAnimation() {
+        status = "paused";
+        if (animateGlobal) {
+            clearInterval(animateGlobal);
+        }
+        timerRef.current.classList.add('paused')
+        timerRef2.current.classList.add('paused')
+        mainTimerRef.current.classList.add('paused')
+
+
+
     }
-    timerRef.current.classList.add('paused')
-    timerRef2.current.classList.add('paused')
-    mainTimerRef.current.classList.add('paused')
+
+    function startAnimation() {
+        status = "start";
+        animateGlobal = setInterval(animate, duration*10);
+        timerRef.current.classList.remove('paused')
+        timerRef2.current.classList.remove('paused')
+        mainTimerRef.current.classList.remove('paused')
 
 
+    }
 
-   }
+    function resetAnimation() {
 
-   function startAnimation(){
-    status = "start";
-    animateGlobal = setInterval(animate,60);
-    timerRef.current.classList.remove('paused')
-    timerRef2.current.classList.remove('paused')
-    mainTimerRef.current.classList.remove('paused')
+        var el = timerRef.current;
+        el.style.animation = 'none';
 
 
-   }
+        el = timerRef2.current;
+        el.style.animation = 'none';
 
-   function resetAnimation(){
-
-    var el = timerRef.current;
-    el.style.animation = 'none';
-    // el.offsetHeight = el.offsetHeight; /* trigger reflow */
-   // el.style.animation = null; 
-
-     el = timerRef2.current;
-    el.style.animation = 'none';
-    // el.offsetHeight = el.offsetHeight; /* trigger reflow */
-   // el.style.animation = null; 
-
-    el = mainTimerRef.current;
-    el.style.animation = 'none';
-        // animateGlobal = setInterval(animate,60);
-        progress  = 0;
-
-
-    setTimeout(()=>{
-       var el = timerRef.current;
-        //el.style.animation = '';
-        // el.offsetHeight = el.offsetHeight; /* trigger reflow */
-        el.style.animation = null; 
-    
-         el = timerRef2.current;
-        //el.style.animation = '';
-        // el.offsetHeight = el.offsetHeight; /* trigger reflow */
-        el.style.animation = null; 
-    
         el = mainTimerRef.current;
-        el.style.animation = null; 
-        stopAnimation();
-
-    },10)
-
-   }
+        el.style.animation = 'none';
+        progress = 0;
 
 
-   useEffect(()=>{
-    // setTimeout(()=>{
-    // timerRef.current.classList.add('paused')
-    // timerRef2.current.classList.add('paused')
-    // },1);
-   },[])
+        setTimeout(() => {
+            stopAnimation();
+
+            var el = timerRef.current;
+
+            el.style.animation = null;
+            el.style.WebkitAnimationDuration = (duration)+"s";
+            // el.style.animationDuration=(duration)+"s"
+
+            el = timerRef2.current;
+            el.style.animation = null;
+
+            el.style.WebkitAnimationDuration=(duration/2)+"s"
+
+            el = mainTimerRef.current;
+            el.style.animation = null;
+
+            el.style.WebkitAnimationDelay=(duration/2)+"s"
+
+        }, 10)
+
+    }
 
 
 
 
-    var { width, height, fontSize } = props;
-    if (!width)
-        width = 70;
-    if (!height)
-        height = 70;
-    if (!fontSize)
-        fontSize = 16;
 
-    var clipRect = `rect(0px, ${width}px, ${width}px, ${width/2}px)`
-    var clipRectCircle = `rect(0px, ${width/2}px, ${width}px, ${0}px)`
+   console.log((duration/2)+"s")
+  
 
-        return (
-            <div>
-            <div style={{position:"relative",height:"fit-content",minHeight:height+"px",minWidth:width+"px",display:"flex",justifyContent:"center",transform:"rotate(180deg)"}}>
-            <div ref = {mainTimerRef} className='loader-main loader-animate paused' style={{width:width+"px",height:height+"px",fontSize:fontSize+"px",zIndex:"100",clip:clipRect}} data-anim="base wrapper" >
-            
-            <div ref={timerRef} class="loader-circle paused" style={{width:(width-20)+"px",height:(height-20)+"px",fontSize:fontSize+"px",zIndex:"100",clip:clipRectCircle,borderRadius:(width/2)+"px"}} data-anim="base left"></div>
-             <div ref={timerRef2} class="loader-circle paused" style={{width:(width-20)+"px",height:(height-20)+"px",fontSize:fontSize+"px",zIndex:"100",clip:clipRectCircle,borderRadius:(width/2)+"px"}} data-anim="base right"></div>
-            <div style={{position:"absolute",transform:"translate(-50)"}}>
-                {/* <p ref={timerRef3}>{progress}%</p> */}
+    var clipRect = `rect(0px, ${width}px, ${width}px, ${width / 2}px)`
+    var clipRectCircle = `rect(0px, ${width / 2}px, ${width}px, ${0}px)`
+
+    return (
+        <div>
+            <div style={{ position: "relative", height: "fit-content", minHeight: height + "px", minWidth: width + "px", display: "flex", justifyContent: "center", transform: "rotate(180deg)" }}>
+                <div ref={mainTimerRef} className='loader-main loader-animate paused' style={{ width: width + "px", height: height + "px", fontSize: fontSize + "px", zIndex: "100", clip: clipRect,WebkitAnimationDelay:(duration/2)+"s" }} data-anim="base wrapper" >
+
+                    <div ref={timerRef} class="loader-circle paused" style={{ width: (width - 20) + "px", height: (height - 20) + "px", fontSize: fontSize + "px", zIndex: "100", clip: clipRectCircle, borderRadius: (width / 2) + "px",WebkitAnimationDuration:duration+"s" }} data-anim="base left"></div>
+                    <div ref={timerRef2} class="loader-circle paused" style={{ width: (width - 20) + "px", height: (height - 20) + "px", fontSize: fontSize + "px", zIndex: "100", clip: clipRectCircle, borderRadius: (width / 2) + "px",WebkitAnimationDuration:(duration/2)+"s" }} data-anim="base right"></div>
+                    <div style={{ position: "absolute", transform: "translate(-50)" }}>
+                        {/* <p ref={timerRef3}>{progress}%</p> */}
+                    </div>
+                </div>
+                <div className='' style={{ width: width + "px", height: height + "px", fontSize: fontSize + "px", zIndex: "100", clip: clipRect, display: "flex", justifyContent: "center", alignItems: "center" }} data-anim="base wrapper" >
+
+
+                    <div style={{ position: "absolute", transform: "rotate(180deg)" }}>
+                        <p ref={timerRef3}>{progress}%</p>
+                    </div>
+                </div>
             </div>
-            </div>
-            <div  className='' style={{width:width+"px",height:height+"px",fontSize:fontSize+"px",zIndex:"100",clip:clipRect,display:"flex",justifyContent:"center",alignItems:"center"}} data-anim="base wrapper" >
-            
-            
-            <div style={{position:"absolute",transform:"rotate(180deg)"}}>
-                <p ref={timerRef3}>{progress}%</p>
-            </div>
-            </div>
-            </div>
-            <div style={{margin:"auto"}}>
-            <button  className='nav-btns' onClick={()=>{if(status=="paused")startAnimation();}}>Start</button>
-            <button  className='nav-btns' onClick={()=>{if(status=="start")stopAnimation();}}>Pause</button>
-            <button className='nav-btns' onClick={resetAnimation}>Reset</button>
-            </div>
-           
+            <div style={{ margin: "auto" }}>
+                <button className='nav-btns' onClick={() => { if (status == "paused") startAnimation(); }}>Start</button>
+                <button className='nav-btns' onClick={() => { if (status == "start") stopAnimation(); }}>Pause</button>
+                <button className='nav-btns' onClick={resetAnimation}>Reset</button>
             </div>
 
-        )
+        </div>
+
+    )
 }
 
 export default Loader

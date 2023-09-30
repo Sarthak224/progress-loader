@@ -1,12 +1,15 @@
 import logo from './logo.svg';
 import './App.css';
 import Loader from './components/Loader';
+import { useMemo, useState } from 'react';
 
 function App() {
+  const [rtx,setRtx] = useState(true)
+  const loader = useMemo(()=>      <Loader width={270} height={270} fontSize={19} duration={16}/>,[]  )
   return (
     <div className="App">
      <header className="App-header">
-      <Loader width={270} height={270} fontSize={19} />
+      {loader}
         {/*
         <img src={logo} className="App-logo" alt="logo" />
         <p>

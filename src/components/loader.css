@@ -51,17 +51,20 @@
   
   .loader-main[data-anim~=wrapper] {
     -webkit-animation-duration: 0.01s; /* Complete keyframes asap */
-    -webkit-animation-delay: 3s; /* Wait half of the animation */
+    -webkit-animation-delay: 3s; 
+    /* Wait half of the animation */
     -webkit-animation-name: close-wrapper; /* Keyframes name */
   }
   
   .loader-circle[data-anim~=left] {
-    -webkit-animation-duration: 6s; /* Full animation time */
+    -webkit-animation-duration: 6s; 
+    /* Full animation time */
     -webkit-animation-name: left-spin;
   }
   
   .loader-circle[data-anim~=right] {
-    -webkit-animation-duration: 3s; /* Half animation time */
+    -webkit-animation-duration: 3s;
+     /* Half animation time */
     -webkit-animation-name: right-spin;
   }
   /* Rotate the right side of the progress bar from 0 to 180 degrees */
